@@ -1,14 +1,7 @@
 # coding: utf-8
 
 
-require 'fileutils'
-require 'open3'
-require 'pp'
-require 'rexml/document'
-include REXML
-
-
-class WholeBookConverter
+class Zenithal::Book::WholeBookConverter
 
   TYPESET_COMMAND = "cd %O & AHFCmd -pgbar -x 3 -d main.fo -p @PDF -o document.pdf 2> error.txt"
   OPEN_COMMANDS = {
@@ -85,7 +78,7 @@ class WholeBookConverter
   end
 
   def create_parser(main = true)
-    parser = ZenithalParser.new("")
+    parser = Zenithal::ZenithalParser.new("")
     parser.brace_name = "x"
     parser.bracket_name = "xn"
     parser.slash_name = "i"
@@ -103,7 +96,7 @@ class WholeBookConverter
   end
 
   def create_converter
-    converter = ZenithalConverter.new(nil)
+    converter = Zenithal::ZenithalConverter.new(nil)
     Dir.each_child(@dirs[:template]) do |entry|
       if entry.end_with?(".rb")
         binding = TOPLEVEL_BINDING
@@ -115,7 +108,7 @@ class WholeBookConverter
   end
 
   def create_formatter
-    formatter = Formatters::Default.new
+    formatter = REXML::Formatters::Default.new
     return formatter
   end
 
