@@ -3,7 +3,7 @@
 
 module Zenithal::Book
 
-  VERSION = "1.0.1"
+  VERSION = "1.1.0"
   VERSION_ARRAY = VERSION.split(/\./).map(&:to_i)
 
 end
