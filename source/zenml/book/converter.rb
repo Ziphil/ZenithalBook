@@ -25,14 +25,14 @@ class Zenithal::Book::WholeBookConverter
   end
 
   def execute
-    path = File.join(@dirs[:document], "main.zml")
+    path = File.join(@dirs[:document], "manuscript", "main.zml")
     convert_normal(path)
     convert_typeset(path) if @typeset
     convert_open(path) if @open_type
   end
 
   def convert_normal(path)
-    output_path = path.gsub(@dirs[:document], @dirs[:output]).gsub(".zml", ".fo")
+    output_path = path.gsub(File.join(@dirs[:document], "manuscript"), @dirs[:output]).gsub(".zml", ".fo")
     parser = create_parser.tap{|s| s.update(File.read(path))}
     converter = create_converter.tap{|s| s.update(parser.run)}
     formatter = create_formatter
@@ -86,7 +86,7 @@ class Zenithal::Book::WholeBookConverter
       parser.register_macro("import") do |attributes, _|
         import_path = attributes["src"]
         import_parser = create_parser(false)
-        import_parser.update(File.read(File.join(@dirs[:document], import_path)))
+        import_parser.update(File.read(File.join(@dirs[:document], "manuscript", import_path)))
         document = import_parser.run
         import_nodes = (attributes["expand"]) ? document.root.children : [document.root]
         next import_nodes
